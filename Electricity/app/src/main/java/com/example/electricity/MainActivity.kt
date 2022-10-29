@@ -79,7 +79,7 @@ fun Index(type: String) {
             .fillMaxWidth(),
         contentAlignment = Alignment.BottomCenter
     ) {
-        TextField(modifier = Modifier.padding(bottom = 2.dp),
+        TextField(modifier = Modifier.padding(bottom = 8.dp),
             value = text,
             onValueChange = {
                 text = it
