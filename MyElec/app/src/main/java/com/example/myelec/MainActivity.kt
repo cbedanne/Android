@@ -1,8 +1,10 @@
 package com.example.myelec
 
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -17,12 +19,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.myelec.ui.theme.MyElecTheme
+import java.time.LocalDate
 
 class MainActivity : ComponentActivity() {
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -94,25 +99,29 @@ fun Index(type: String) {
 
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun Index() {
+    val today = LocalDate.now()
     val indexValues = remember {
-        mutableStateListOf("0", "0", "0")
+        mutableStateListOf(today.toString(),"0", "0", "0")
     }
     val textFieldTitles=remember {
-        listOf("Compteur de jour", "Compteur de nuit", "Panneaux")
+        listOf("Date","Compteur de jour", "Compteur de nuit", "Panneaux")
     }
     val listState = rememberLazyListState()
     val focusManager = LocalFocusManager.current
     LazyColumn(
         state = listState,
         modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
+
     ) {
         itemsIndexed(indexValues) { i, _ ->
             OutlinedTextField(value=indexValues[i],
+                enabled = true,
                 modifier = Modifier.padding(top = 16.dp),
-                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next, keyboardType = KeyboardType.Number),
                 keyboardActions = KeyboardActions(
                     onNext = {focusManager.moveFocus(FocusDirection.Down)}
                 ),
